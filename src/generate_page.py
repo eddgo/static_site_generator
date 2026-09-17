@@ -46,35 +46,12 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path,base
         entry_path = os.path.join(dir_path_content,entry)
         print(f"Entry path is: {entry_path}")
         if os.path.isfile(entry_path):
-            contentfile_path = os.path.join(dir_path_content, entry)
-            destfile_path = os.path.join(dest_dir_path, "index.html")
-            print(f"Generating page from {dir_path_content} to {destfile_path} using {template_path}.")
-
-            mf = open(contentfile_path)
-            md_content = mf.read()
-
-            tf = open(template_path)
-            tp_content = tf.read()
-
-            html_nodes = markdown_to_html_node(md_content)
-            html_content = html_nodes.to_html()
-            site_title = extract_title(md_content)
-
-            html_site = tp_content.replace("{{ Title }}", site_title)
-            html_site = html_site.replace("{{ Content }}", f"{html_content}")
-            html_site = html_site.replace('href="/', f'href="{basepath}')
-            html_site = html_site.replace('src="/', f'src="{basepath}')
-
-            if not os.path.exists(dest_dir_path):
-                os.mkdir(dest_dir_path)
-
-            with open(destfile_path, "w") as f:
-                f.write(html_site)
+            generate_page(entry_path,template_path,dest_dir_path,basepath)
         else:
             new_dest_dir_path = os.path.join(dest_dir_path,entry)
             if not os.path.exists(new_dest_dir_path):
                 os.mkdir(new_dest_dir_path)
-            generate_pages_recursive(entry_path, template_path, new_dest_dir_path,basepath)
+            generate_pages_recursive(entry_path,template_path,new_dest_dir_path,basepath)
 
 
 
